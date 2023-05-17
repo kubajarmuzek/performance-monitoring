@@ -1,0 +1,9 @@
+canvas {
+    max-height: 300px;
+    max-width: 400px;
+}
+
+#canvas-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
