@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,18 +9,36 @@
     <script src="script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://kit.fontawesome.com/1f3d88931b.js" crossorigin="anonymous"></script>
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
 </head>
-<body>
-    <h1>Performance monitoring app</h1>
-    <div class="upload-section">
-        <h2>Choose a .csv extension file containing data you want to compare</h2>
-        <input type="file" id="file-input">
-        <button onclick="uploadFile()">Upload</button>
-    </div>
-    <h2>Content of the file:</h2>
-    <div id="file-content"></div>
-    <div id="canvas-container">
 
+<body>
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="#">Performance charts</a>
+        <a href="readiness.html">Readiness protocol</a>
     </div>
+
+    <!-- Use any element to open the sidenav -->
+    <span onclick="openNav()" class="menu-bars"><i class="fa-solid fa-bars fa-2xl"></i></span>
+
+    <!-- Add all page content inside this div if you want the side nav to push page content to the right (not used if you only want the sidenav to sit on top of the page -->
+    <div id="main">
+        <div class="intro">
+            <h1>Performance monitoring app</h1>
+            <div class="upload-section">
+                <h2>Choose a .csv extension file containing data you want to compare</h2>
+                <input type="file" id="file-input">
+                <button onclick="uploadFile()">Upload</button>
+                <button onclick="clearView()">Clear</button>
+            </div>
+        </div>
+        <div id="canvas-container">
+            
+        </div>
+    </div>
+
 </body>
+
 </html>

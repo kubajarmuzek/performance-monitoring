@@ -1,3 +1,18 @@
+function clearView() {
+}
+
+function openNav() {
+  document.getElementById("mySidenav").style.width = "250px";
+  document.getElementById("main").style.marginLeft = "250px";
+  document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
+}
+
+function closeNav() {
+  document.getElementById("mySidenav").style.width = "0";
+  document.getElementById("main").style.marginLeft = "0";
+  document.body.style.backgroundColor = "white";
+}
+
 function uploadFile() {
   var fileInput = document.getElementById('file-input');
   var file = fileInput.files[0];
@@ -16,7 +31,7 @@ function uploadFile() {
     for (var i = 1; i < fileContent.length; i++) {
       dates.push(fileContent[i][1])
     }
-    for (var j = 2; j < fileContent.length -1; j++) {
+    for (var j = 2; j < fileContent.length -2; j++) {
       for (var i = 1; i < fileContent.length; i++) {
         data.push(fileContent[i][j])
       }
@@ -48,13 +63,17 @@ function createChart(chart_label, dates, data) {
 
   // Create the line chart
   const canvas = document.createElement('canvas');
+  const chart_container = document.createElement('div');
+
 
   // Set attributes (optional)
   canvas.setAttribute('id', 'myChart');
+  chart_container.setAttribute('id', 'chart-container');
 
   // Append the canvas element to the container div
   const container = document.getElementById('canvas-container');
-  container.appendChild(canvas);
+  container.appendChild(chart_container);
+  chart_container.appendChild(canvas);
 
   // Get the canvas context
   const ctx = canvas.getContext('2d');
