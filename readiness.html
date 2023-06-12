@@ -13,26 +13,28 @@
     <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
 </head>
 
-<body>
+<body style="background-color: hsl(200, 100%, 20%);">
     <div id="mySidenav" class="sidenav">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
         <a href="index.html">Performance charts</a>
         <a href="#">Readiness protocol</a>
     </div>
     <span onclick="openNav()"><i class="fa-solid fa-bars fa-2xl"></i></span>
-    <div class="container">
-        <div id="questionare-container" class="hide">
-            <div id="question">Question</div>
-            <div id="answer-buttons" class="btn-grid">
-                <button class="btn">A1</button>
-                <button class="btn">A2</button>
-                <button class="btn">A3</button>
-                <button class="btn">A4</button>
+    <div class="container-outer">
+        <div class="container">
+            <div id="questionare-container" class="hide">
+                <div id="question">Question</div>
+                <div id="answer-buttons" class="btn-grid">
+                    <button class="btn">A1</button>
+                    <button class="btn">A2</button>
+                    <button class="btn">A3</button>
+                    <button class="btn">A4</button>
+                </div>
             </div>
-        </div>
-        <div class="controls">
-            <button id="start-btn" class="start-btn btn">Start</button>
-            <button id="next-btn" class="next-btn btn hide">Next</button>
+            <div class="controls">
+                <button id="start-btn" class="start-btn btn">Start</button>
+                <button id="next-btn" class="next-btn btn hide">Next</button>
+            </div>
         </div>
     </div>
 </body>

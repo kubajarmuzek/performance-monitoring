@@ -1,3 +1,7 @@
+*, *::before,*::after {
+    box-sizing: border-box;
+}
+
 body {
     font-family: 'Poppins', Arial, Helvetica, sans-serif;
 }
@@ -10,11 +14,6 @@ canvas {
 button:focus {
     background-color: #111;
     color: white;
-}
-
-.answers {
-    display: grid;
-    grid-template-columns:1fr 1fr 1fr 1fr 1fr 1fr;
 }
 
 #canvas-container {
@@ -71,3 +70,28 @@ button:focus {
     }
 }
 
+.container-outer {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    width: 90vw;
+    height: 90vh;
+    justify-content: center;
+    align-items: center;
+}
+
+.container{
+    width: 800px;
+    max-width: 80%;
+    background-color: white;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 0 10px 2px;
+}
+
+.btn-grid{
+    display: grid;
+    grid-template-columns: repeat(2,auto);
+    gap: 10px;
+    margin: 20px 0;
+}

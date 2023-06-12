@@ -61,26 +61,22 @@ function createChart(chart_label, dates, data) {
     }]
   };
 
-  // Create the line chart
   const canvas = document.createElement('canvas');
   const chart_container = document.createElement('div');
 
 
-  // Set attributes (optional)
   canvas.setAttribute('id', 'myChart');
   chart_container.setAttribute('id', 'chart-container');
 
-  // Append the canvas element to the container div
   const container = document.getElementById('canvas-container');
   container.appendChild(chart_container);
   chart_container.appendChild(canvas);
 
-  // Get the canvas context
   const ctx = canvas.getContext('2d');
   const myChart = new Chart(ctx, {
     type: 'line',
     data: chart_data,
-    options: {} // You can customize the chart options here
+    options: {} 
   });
 
 }
