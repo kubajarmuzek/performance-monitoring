@@ -83,11 +83,16 @@ button:focus {
     padding: 0;
     margin: 0;
     display: flex;
-    width: 100vw;
-    height: 100vh;
+    width: 95vw;
+    height: 95vh;
     justify-content: center;
     align-items: center;
 
+}
+
+.btn.selected {
+    background-color:white;
+    color: hsl(200, 100%, 50%);
 }
 
 .container {

@@ -1,3 +1,48 @@
+document.addEventListener('DOMContentLoaded', function() {
+  const submitButton = document.getElementById('submit');
+  submitButton.addEventListener('click', calculateScore);
+
+  const questionContainers = document.querySelectorAll('#questionare-container');
+
+  questionContainers.forEach(container => {
+    const answerButtons = container.querySelectorAll('.btn-grid .btn');
+    answerButtons.forEach(button => {
+      button.addEventListener('click', function(event) {
+        event.preventDefault();
+
+        // Remove 'selected' class from all buttons in the current question container
+        const currentButtons = container.querySelectorAll('.btn-grid .btn');
+        currentButtons.forEach(btn => {
+          btn.classList.remove('selected');
+        });
+
+        // Add 'selected' class to the clicked button
+        button.classList.add('selected');
+      });
+    });
+  });
+});
+
+function calculateScore() {
+  const questionContainers = document.querySelectorAll('#questionare-container');
+  let totalScore = 0;
+
+  questionContainers.forEach(container => {
+    const selectedButton = container.querySelector('.btn-grid .btn.selected');
+    if (selectedButton) {
+      const answerValue = parseInt(selectedButton.dataset.value);
+      const weight = parseFloat(selectedButton.dataset.weight);
+      const questionScore = answerValue / 5 * weight;
+      totalScore += questionScore;
+    }
+  });
+
+  // Display the total score or perform further actions
+  console.log('Total Score:', totalScore);
+}
+
+
+
 function clearView() {
 }
 

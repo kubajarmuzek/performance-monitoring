@@ -2,91 +2,91 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Readiness</title>
-    <script src="script.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://kit.fontawesome.com/1f3d88931b.js" crossorigin="anonymous"></script>
-    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Readiness</title>
+  <script src="script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://kit.fontawesome.com/1f3d88931b.js" crossorigin="anonymous"></script>
+  <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
 </head>
 
 <body>
-    <div id="mySidenav" class="sidenav">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a href="index.html">Performance charts</a>
-        <a href="#">Readiness protocol</a>
-    </div>
-    <span onclick="openNav()"><i class="fa-solid fa-bars fa-2xl"></i></span>
-    <div class="con">
-        <div class="container">
-            <div id="questionare-container">
-                <div id="question">Mood State</div>
-                <div id="answer-buttons" class="btn-grid">
-                    <button class="btn">A1</button>
-                    <button class="btn">A2</button>
-                    <button class="btn">A3</button>
-                    <button class="btn">A4</button>
-                    <button class="btn">A4</button>
-                </div>
-            </div>
-            <div id="questionare-container">
-                <div id="question">Question</div>
-                <div id="answer-buttons" class="btn-grid">
-                    <button class="btn">A1</button>
-                    <button class="btn">A2</button>
-                    <button class="btn">A3</button>
-                    <button class="btn">A4</button>
-                    <button class="btn">A4</button>
-                </div>
-            </div>
-            <div id="questionare-container" >
-                <div id="question">Question</div>
-                <div id="answer-buttons" class="btn-grid">
-                    <button class="btn">A1</button>
-                    <button class="btn">A2</button>
-                    <button class="btn">A3</button>
-                    <button class="btn">A4</button>
-                    <button class="btn">A4</button>
-                </div>
-            </div>
-            <div id="questionare-container" >
-                <div id="question">Question</div>
-                <div id="answer-buttons" class="btn-grid">
-                    <button class="btn">A1</button>
-                    <button class="btn">A2</button>
-                    <button class="btn">A3</button>
-                    <button class="btn">A4</button>
-                    <button class="btn">A4</button>
-                </div>
-            </div>
-            <div id="questionare-container" >
-                <div id="question">Question</div>
-                <div id="answer-buttons" class="btn-grid">
-                    <button class="btn">A1</button>
-                    <button class="btn">A2</button>
-                    <button class="btn">A3</button>
-                    <button class="btn">A4</button>
-                    <button class="btn">A4</button>
-                </div>
-            </div>
-            <div id="questionare-container" >
-                <div id="question">Question</div>
-                <div id="answer-buttons" class="btn-grid">
-                    <button class="btn">A1</button>
-                    <button class="btn">A2</button>
-                    <button class="btn">A3</button>
-                    <button class="btn">A4</button>
-                    <button class="btn">A4</button>
-                </div>
-            </div>
-            <div class="controls">
-                <button id="submit" class="submit btn">Submit</button>
-            </div>
+  <div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="index.html">Performance charts</a>
+    <a href="#">Readiness protocol</a>
+  </div>
+  <span onclick="openNav()"><i class="fa-solid fa-bars fa-2xl"></i></span>
+  <div class="con">
+    <div class="container">
+      <div id="questionare-container">
+        <div id="question">Mood State</div>
+        <div id="answer-buttons" class="btn-grid">
+          <button class="btn" data-value="1" data-weight="0.14">1.Highly annoyed/irritable/down</button>
+          <button class="btn" data-value="2" data-weight="0.14">2.Snappiness at teammates, family and coworkers</button>
+          <button class="btn" data-value="3" data-weight="0.14">3.Less interested in others/activities than usual</button>
+          <button class="btn" data-value="4" data-weight="0.14">4.Good mood</button>
+          <button class="btn" data-value="5" data-weight="0.14">5.Very positive mood</button>
         </div>
+      </div>
+      <div id="questionare-container">
+        <div id="question">Sleep quality</div>
+        <div id="answer-buttons" class="btn-grid">
+          <button class="btn" data-value="1" data-weight="0.19">1.Hardly slept at all</button>
+          <button class="btn" data-value="2" data-weight="0.19">2.Tossed and turned</button>
+          <button class="btn" data-value="3" data-weight="0.19">3.Reasonable/Just OK</button>
+          <button class="btn" data-value="4" data-weight="0.19">4.Good night's sleep; Feeling refreshed</button>
+          <button class="btn" data-value="5" data-weight="0.19">5.Had a great sleep. Feeling very refreshed</button>
+        </div>
+      </div>
+      <div id="questionare-container">
+        <div id="question">Energy levels</div>
+        <div id="answer-buttons" class="btn-grid">
+          <button class="btn" data-value="1" data-weight="0.20">1.Very lethargic - no energy at all</button>
+          <button class="btn" data-value="2" data-weight="0.20">2.Very low energy levels</button>
+          <button class="btn" data-value="3" data-weight="0.20">3.Reasonable energy levels</button>
+          <button class="btn" data-value="4" data-weight="0.20">4.Good energy levels</button>
+          <button class="btn" data-value="5" data-weight="0.20">5.Full of energy</button>
+        </div>
+      </div>
+      <div id="questionare-container">
+        <div id="question">Muscle Soreness</div>
+        <div id="answer-buttons" class="btn-grid">
+          <button class="btn" data-value="1" data-weight="0.19">1.Extremely sore</button>
+          <button class="btn" data-value="2" data-weight="0.19">2.Very sore</button>
+          <button class="btn" data-value="3" data-weight="0.19">3.Quite sore</button>
+          <button class="btn" data-value="4" data-weight="0.19">4.Mild soreness</button>
+          <button class="btn" data-value="5" data-weight="0.19">5.Not sore at all</button>
+        </div>
+      </div>
+      <div id="questionare-container">
+        <div id="question">Diet yesterday</div>
+        <div id="answer-buttons" class="btn-grid">
+          <button class="btn" data-value="1" data-weight="0.14">1.All meals high sugar/processed food, no fruit/veg</button>
+          <button class="btn" data-value="2" data-weight="0.14">2.Some meals high sugar/processed food, no fruit & veg</button>
+          <button class="btn" data-value="3" data-weight="0.14">3.Ate reasonably, some sugar/processed food intake, at least 1 serving of veg</button>
+          <button class="btn" data-value="4" data-weight="0.14">4.Ate well, low sugar/processed food intake, 2 or more servings of veg & fruit</button>
+          <button class="btn" data-value="5" data-weight="0.14">5.Ate really well, no sugar/processed foods and lots of veg and some fruit</button>
+        </div>
+      </div>
+      <div id="questionare-container">
+        <div id="question">Stress</div>
+        <div id="answer-buttons" class="btn-grid">
+          <button class="btn" data-value="1" data-weight="0.14">1.Highly stressed</button>
+          <button class="btn" data-value="2" data-weight="0.14">2.Feeling stressed</button>
+          <button class="btn" data-value="3" data-weight="0.14">3.Reasonable/just OK</button>
+          <button class="btn" data-value="4" data-weight="0.14">4.Relaxed</button>
+          <button class="btn" data-value="5" data-weight="0.14">5.Very relaxed</button>
+        </div>
+      </div>
+      <div class="controls">
+        <button id="submit" class="submit btn">Submit</button>
+      </div>
     </div>
+  </div>
 </body>
 
 </html>
