@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   const submitButton = document.getElementById('submit');
   submitButton.addEventListener('click', calculateScore);
 
@@ -7,21 +7,20 @@ document.addEventListener('DOMContentLoaded', function() {
   questionContainers.forEach(container => {
     const answerButtons = container.querySelectorAll('.btn-grid .btn');
     answerButtons.forEach(button => {
-      button.addEventListener('click', function(event) {
+      button.addEventListener('click', function (event) {
         event.preventDefault();
 
-        // Remove 'selected' class from all buttons in the current question container
         const currentButtons = container.querySelectorAll('.btn-grid .btn');
         currentButtons.forEach(btn => {
           btn.classList.remove('selected');
         });
 
-        // Add 'selected' class to the clicked button
         button.classList.add('selected');
       });
     });
   });
 });
+
 
 function calculateScore() {
   const questionContainers = document.querySelectorAll('#questionare-container');
@@ -37,14 +36,45 @@ function calculateScore() {
     }
   });
 
-  // Display the total score or perform further actions
   console.log('Total Score:', totalScore);
+
+  openPopup(totalScore);
 }
 
+function openPopup(score) {
+  const popup = document.getElementById("popup");
+
+  const popupContent = popup.querySelector(".popup-content");
+  popupContent.innerHTML = `
+    <h2>Your Score</h2>
+    <p>${score}</p>
+    <button id="closePopup">Close</button>
+  `;
+
+  popup.style.display = "block";
+
+  const closePopupButton = popup.querySelector("#closePopup");
+  closePopupButton.addEventListener("click", function () {
+    popup.style.display = "none";
+  });
+}
 
 
 function clearView() {
+  const divs = document.querySelectorAll('div[id^="canvas-container-"]');
+
+  divs.forEach(function (div) {
+    div.parentNode.removeChild(div);
+  });
+
+  const div = document.querySelector("#canvas-container");
+  const headers = div.querySelectorAll('h2');
+  headers.forEach(function(header) {
+    header.parentNode.removeChild(header);
+  });
 }
+
+
 
 function openNav() {
   document.getElementById("mySidenav").style.width = "250px";
@@ -52,11 +82,13 @@ function openNav() {
   document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
 }
 
+
 function closeNav() {
   document.getElementById("mySidenav").style.width = "0";
   document.getElementById("main").style.marginLeft = "0";
   document.body.style.backgroundColor = "white";
 }
+
 
 function uploadFile() {
   var fileInput = document.getElementById('file-input');
@@ -65,63 +97,94 @@ function uploadFile() {
   var reader = new FileReader();
 
   reader.onload = function (event) {
+
     var data = []
-    const dates = []
+    var dates = []
     var fileContent = event.target.result;
     fileContent = fileContent.split("\n")
     for (var i = 0; i < fileContent.length; i++) {
       fileContent[i] = fileContent[i].split("\"").join("")
       fileContent[i] = fileContent[i].split(",")
     }
-    for (var i = 1; i < fileContent.length; i++) {
-      dates.push(fileContent[i][1])
-    }
-    for (var j = 2; j < fileContent.length -2; j++) {
+
+    const distinctNames = [...new Set(fileContent.slice(1).map(row => row[0]))];
+
+    console.log(distinctNames);
+
+    const container = document.getElementById('canvas-container');
+
+    for (var q = 0; q < distinctNames.length; q++) {
+      data = []
+      dates = []
+
+      const heading = document.createElement('h2');
+      heading.textContent = distinctNames[q];
+      container.appendChild(heading);
+
+      const chartContainerId = `canvas-container-${distinctNames[q]}`;
+      const chartContainer = document.createElement('div');
+      chartContainer.setAttribute('id', chartContainerId);
+      chartContainer.classList.add('canvas-container');
+
+      container.appendChild(chartContainer);
+      
+
       for (var i = 1; i < fileContent.length; i++) {
-        data.push(fileContent[i][j])
+        if (fileContent[i][0] == distinctNames[q]) {
+          dates.push(fileContent[i][1])
+        }
       }
-      createChart(fileContent[0][j],dates,data)
-      data=[]
+      for (var j = 2; j < (fileContent.length - 2) / distinctNames.length; j++) {
+        for (var i = 1; i < fileContent.length; i++) {
+          if (fileContent[i][0] == distinctNames[q]) {
+            data.push(fileContent[i][j])
+          }
+
+        }
+        createChart(distinctNames[q], fileContent[0][j], dates, data)
+        data = []
+      }
+      console.log(fileContent)
+      //displayFileContent(fileContent);
     }
-    console.log(fileContent)
-    //displayFileContent(fileContent);
   };
 
   reader.readAsText(file);
 }
+
 
 function displayFileContent(content) {
   var fileContentDiv = document.getElementById('file-content');
   fileContentDiv.textContent = content;
 }
 
-function createChart(chart_label, dates, data) {
+function createChart(name, chart_label, dates, data) {
   const chart_data = {
     labels: dates,
     datasets: [{
       label: chart_label,
       data: data,
-      borderColor: 'rgba(75, 192, 192, 1)', // Color of the line
-      backgroundColor: 'rgba(75, 192, 192, 0.2)', // Color underneath the line
+      borderColor: 'rgba(75, 192, 192, 1)',
+      backgroundColor: 'rgba(75, 192, 192, 0.2)',
     }]
   };
 
   const canvas = document.createElement('canvas');
   const chart_container = document.createElement('div');
 
-
   canvas.setAttribute('id', 'myChart');
-  chart_container.setAttribute('id', 'chart-container');
 
-  const container = document.getElementById('canvas-container');
-  container.appendChild(chart_container);
-  chart_container.appendChild(canvas);
+  const containerId = `canvas-container-${name}`;
+  const container = document.getElementById(containerId);
+  if (container) {
+    container.appendChild(chart_container);
+    chart_container.appendChild(canvas);
 
-  const ctx = canvas.getContext('2d');
-  const myChart = new Chart(ctx, {
-    type: 'line',
-    data: chart_data,
-    options: {} 
-  });
-
+    const ctx = canvas.getContext('2d');
+    const myChart = new Chart(ctx, {
+      type: 'line',
+      data: chart_data,
+      options: {}
+    });
+  }
 }
