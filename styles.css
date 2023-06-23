@@ -86,8 +86,6 @@ button:focus {
     width: 95vw;
     height: 95vh;
     justify-content: center;
-    align-items: center;
-
 }
 
 .btn.selected {
