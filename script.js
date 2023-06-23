@@ -128,21 +128,32 @@ function uploadFile() {
 
       container.appendChild(chartContainer);
       
-
+      console.log("1")
       for (var i = 1; i < fileContent.length; i++) {
         if (fileContent[i][0] == distinctNames[q]) {
-          dates.push(fileContent[i][1])
+          dates.push(convertDateFormat(fileContent[i][3]))
+          console.log("2")
         }
       }
-      for (var j = 2; j < (fileContent.length - 2) / distinctNames.length; j++) {
+      console.log(dates)
+      for (var j = 5; j < (fileContent[0].length - 5) / distinctNames.length; j++) {
+        var breakOccurred = false;
         for (var i = 1; i < fileContent.length; i++) {
           if (fileContent[i][0] == distinctNames[q]) {
-            data.push(fileContent[i][j])
+            if(fileContent[i][j]==""){
+              data=[];
+              breakOccurred=true;
+              break;       
+            }
+            console.log(fileContent[i][j])
+            data.push(removeUnit(fileContent[i][j]))
           }
 
         }
-        createChart(distinctNames[q], fileContent[0][j], dates, data)
-        data = []
+        if (!breakOccurred) {
+          createChart(distinctNames[q], fileContent[0][j], dates, data);
+        }
+        data = [];
       }
       console.log(fileContent)
       //displayFileContent(fileContent);
@@ -187,4 +198,30 @@ function createChart(name, chart_label, dates, data) {
       options: {}
     });
   }
+}
+
+function removeUnit(number) {
+  var numberString = number.toString();
+
+  numberString = numberString.replace(',', '.');
+
+  var cleanNumberString = numberString.replace(/[^\d.]/g, '');
+
+  var cleanNumber = Number(cleanNumberString);
+  return cleanNumber;
+}
+
+
+function convertDateFormat(dateString) {
+  var dateParts = dateString.split('/');
+
+  var day = dateParts[0];
+  var month = dateParts[1];
+  var year = dateParts[2];
+
+  var date = new Date(year, month - 1, day);
+
+  var formattedDate = date.toISOString().split('T')[0];
+
+  return formattedDate;
 }
