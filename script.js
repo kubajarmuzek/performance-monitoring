@@ -69,7 +69,7 @@ function clearView() {
 
   const div = document.querySelector("#canvas-container");
   const headers = div.querySelectorAll('h2');
-  headers.forEach(function(header) {
+  headers.forEach(function (header) {
     header.parentNode.removeChild(header);
   });
 }
@@ -98,65 +98,74 @@ function uploadFile() {
 
   reader.onload = function (event) {
 
-    var data = []
-    var dates = []
-    var fileContent = event.target.result;
-    fileContent = fileContent.split("\n")
-    for (var i = 0; i < fileContent.length; i++) {
-      fileContent[i] = fileContent[i].split("\"").join("")
-      fileContent[i] = fileContent[i].split(",")
+    var data = [];
+    var dates = [];
+    var type = -1;
+    var fileContentAll = event.target.result;
+    fileContentAll = fileContentAll.split("\n")
+    for (var i = 0; i < fileContentAll.length; i++) {
+      fileContentAll[i] = fileContentAll[i].split("\"").join("")
+      fileContentAll[i] = fileContentAll[i].split(",")
+    }
+    for (var i = 0; i < fileContentAll[0].length; i++) {
+      if (fileContentAll[0][i] == "Test Type") {
+        type = i;
+      }
     }
 
-    const distinctNames = [...new Set(fileContent.slice(1).map(row => row[0]))];
-
-    console.log(distinctNames);
+    const distinctNames = [...new Set(fileContentAll.slice(1).map(row => row[0]))];
+    const distinctTests = [...new Set(fileContentAll.slice(1).map(row => row[type]))];
+    
 
     const container = document.getElementById('canvas-container');
 
-    for (var q = 0; q < distinctNames.length; q++) {
-      data = []
-      dates = []
-
-      const heading = document.createElement('h2');
-      heading.textContent = distinctNames[q];
-      container.appendChild(heading);
-
-      const chartContainerId = `canvas-container-${distinctNames[q]}`;
-      const chartContainer = document.createElement('div');
-      chartContainer.setAttribute('id', chartContainerId);
-      chartContainer.classList.add('canvas-container');
-
-      container.appendChild(chartContainer);
-      
-      console.log("1")
-      for (var i = 1; i < fileContent.length; i++) {
-        if (fileContent[i][0] == distinctNames[q]) {
-          dates.push(convertDateFormat(fileContent[i][3]))
-          console.log("2")
-        }
-      }
-      console.log(dates)
-      for (var j = 5; j < (fileContent[0].length - 5) / distinctNames.length; j++) {
-        var breakOccurred = false;
+    for(var w=0;w<distinctTests.length;w++){
+      fileContent=filterRowsByTestType(fileContentAll,distinctTests[w]);
+      console.log(fileContent);
+      for (var q = 0; q < distinctNames.length; q++) {
+        data = []
+        dates = []
+        const heading = document.createElement('h2');
+        heading.textContent = distinctNames[q]+" "+fileContent[1][type];
+        container.appendChild(heading);
+  
+        const chartContainerId = `canvas-container-${distinctNames[q]+" "+fileContent[1][type]}`;
+        const chartContainer = document.createElement('div');
+        chartContainer.setAttribute('id', chartContainerId);
+        chartContainer.classList.add('canvas-container');
+  
+        container.appendChild(chartContainer);
+  
         for (var i = 1; i < fileContent.length; i++) {
           if (fileContent[i][0] == distinctNames[q]) {
-            if(fileContent[i][j]==""){
-              data=[];
-              breakOccurred=true;
-              break;       
-            }
-            console.log(fileContent[i][j])
-            data.push(removeUnit(fileContent[i][j]))
+            dates.push(convertDateFormat(fileContent[i][3]))
           }
-
         }
-        if (!breakOccurred) {
-          createChart(distinctNames[q], fileContent[0][j], dates, data);
+        for (var j = 5; j < (fileContent[0].length - 5); j++) {
+          var breakOccurred = false;
+          for (var i = 1; i < fileContent.length; i++) {
+            if (fileContent[i][0] == distinctNames[q]) {
+              if (fileContent[i][j] == "") {
+                data = [];
+                breakOccurred = true;
+                break;
+              }
+              data.push(removeUnit(fileContent[i][j]))
+            }
+  
+          }
+          if (!breakOccurred) {
+            if (type != -1) {
+              createChart(distinctNames[q]+" "+fileContent[1][type], fileContent[0][j] + " " + fileContent[1][type], dates, data);
+            }
+            else {
+              createChart(distinctNames[q]+" "+fileContent[1][type], fileContent[0][j], dates, data);
+            }
+          }
+          data = [];
         }
-        data = [];
+        //displayFileContent(fileContent);
       }
-      console.log(fileContent)
-      //displayFileContent(fileContent);
     }
   };
 
@@ -224,4 +233,26 @@ function convertDateFormat(dateString) {
   var formattedDate = date.toISOString().split('T')[0];
 
   return formattedDate;
+}
+
+function filterRowsByTestType(table, testType) {
+  const headerRow = table[0];
+  const testTypeIndex = headerRow.indexOf("Test Type");
+  
+  if (testTypeIndex === -1) {
+    console.log("Test Type column not found.");
+    return [];
+  }
+  
+  const filteredTable = [];
+  filteredTable.push(headerRow); // Add the header row to the filtered table
+  
+  for (let i = 1; i < table.length; i++) {
+    const row = table[i];
+    if (row[testTypeIndex] === testType) {
+      filteredTable.push(row);
+    }
+  }
+  
+  return filteredTable;
 }
