@@ -84,7 +84,6 @@ button:focus {
     margin: 0;
     display: flex;
     width: 95vw;
-    height: 95vh;
     justify-content: center;
 }
 
