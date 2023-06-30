@@ -133,3 +133,8 @@ button:focus {
     justify-content: center;
     align-items: center;
 }
+
+#selection {
+    display: grid;
+    grid-template-columns: repeat(3,auto);
+}

@@ -97,7 +97,7 @@ function uploadFile() {
   var reader = new FileReader();
 
   reader.onload = function (event) {
-
+    var types = []
     var data = [];
     var dates = [];
     var type = -1;
@@ -155,35 +155,34 @@ function uploadFile() {
   
           }
           if (!breakOccurred) {
-            if (type != -1) {
-              createChart(distinctNames[q]+" "+fileContent[1][type], fileContent[0][j] + " " + fileContent[1][type], dates, data);
-            }
-            else {
-              createChart(distinctNames[q]+" "+fileContent[1][type], fileContent[0][j], dates, data);
-            }
+            types.push(fileContent[0][j])
+            createChart(distinctNames[q]+" "+fileContent[1][type], fileContent[0][j], dates, data);
           }
           data = [];
         }
-        //displayFileContent(fileContent);
       }
     }
+    enableCorelation(types,fileContentAll);
   };
 
   reader.readAsText(file);
 }
 
-
-function displayFileContent(content) {
-  var fileContentDiv = document.getElementById('file-content');
-  fileContentDiv.textContent = content;
-}
-
 function createChart(name, chart_label, dates, data) {
+  // Sort the dates in ascending order
+  const sortedDates = dates.slice().sort((a, b) => new Date(a) - new Date(b));
+
+  // Find the corresponding indices of the sorted dates in the original array
+  const indices = sortedDates.map(date => dates.indexOf(date));
+
+  // Sort the data based on the indices of the sorted dates
+  const sortedData = indices.map(index => data[index]);
+
   const chart_data = {
-    labels: dates,
+    labels: sortedDates,
     datasets: [{
       label: chart_label,
-      data: data,
+      data: sortedData,
       borderColor: 'rgba(75, 192, 192, 1)',
       backgroundColor: 'rgba(75, 192, 192, 0.2)',
     }]
@@ -209,6 +208,7 @@ function createChart(name, chart_label, dates, data) {
   }
 }
 
+
 function removeUnit(number) {
   var numberString = number.toString();
 
@@ -220,7 +220,6 @@ function removeUnit(number) {
   return cleanNumber;
 }
 
-
 function convertDateFormat(dateString) {
   var dateParts = dateString.split('/');
 
@@ -230,7 +229,14 @@ function convertDateFormat(dateString) {
 
   var date = new Date(year, month - 1, day);
 
-  var formattedDate = date.toISOString().split('T')[0];
+  // Adjust the date based on the timezone offset
+  var timezoneOffset = date.getTimezoneOffset() * 60000; // Convert minutes to milliseconds
+  date.setTime(date.getTime() - timezoneOffset);
+
+  // Since the date is in UTC now, we need to convert it back to the local timezone
+  var localDate = new Date(date.getTime() + timezoneOffset);
+
+  var formattedDate = localDate.toISOString().split('T')[0];
 
   return formattedDate;
 }
@@ -255,4 +261,124 @@ function filterRowsByTestType(table, testType) {
   }
   
   return filteredTable;
+}
+
+function enableCorelation(types,data) {
+  const canvasContainer = document.getElementById('canvas-container');
+
+  const newDiv = document.createElement('div');
+  const innerDiv = document.createElement('div');
+  innerDiv.setAttribute('id','selection');
+  const header = document.createElement('h2');
+  const button = document.createElement('button');
+  button.textContent = 'See corelation';
+
+  header.textContent = 'Correlation';
+  newDiv.appendChild(header);
+
+  const text = document.createElement('p');
+  text.textContent = 'Choose the metrics you want to see correlation of';
+  newDiv.appendChild(text);
+
+  const select1 = document.createElement('select');
+  const select2 = document.createElement('select');
+  select1.setAttribute('id','option1');
+  select1.setAttribute('id','option2');
+  types.forEach(function (type) {
+    const option1 = document.createElement('option');
+    const option2 = document.createElement('option');
+    option1.textContent = type;
+    option2.textContent = type;
+    select1.appendChild(option1);
+    select2.appendChild(option2);
+  });
+  
+  innerDiv.appendChild(select1);
+  innerDiv.appendChild(select2);
+  innerDiv.appendChild(button);
+
+  newDiv.appendChild(innerDiv);
+  
+  const chartDiv = document.createElement('div');
+  chartDiv.setAttribute('id','scatter-container');
+
+  newDiv.appendChild(chartDiv);
+  canvasContainer.parentNode.insertBefore(newDiv, canvasContainer);
+
+  button.addEventListener('click', function() {
+    const selectedOption1 = select1.value;
+    const selectedOption2 = select2.value;
+  
+    const xData = getColumnData(data, selectedOption1);
+    const yData = getColumnData(data, selectedOption2);
+    
+    console.log(xData)
+    console.log(yData)
+    const x = xData.map(str => parseFloat(str));
+    const y = yData.map(str => parseFloat(str));
+    createScatterPlot(xData, yData);
+  });
+  
+}
+
+function createScatterPlot(xValues, yValues) {
+  const scatterData = {
+    datasets: [{
+      data: xValues.map((x, index) => ({ x, y: yValues[index] })),
+      pointBackgroundColor: 'rgba(75, 192, 192, 1)',
+      pointRadius: 5,
+      pointHoverRadius: 7,
+      showLine: false,
+    }]
+  };
+
+  const scatterOptions = {
+    responsive: true,
+    scales: {
+      x: {
+        type: 'linear',
+        position: 'bottom',
+      },
+      y: {
+        type: 'linear',
+      }
+    },
+  };
+
+  const scatterConfig = {
+    type: 'scatter',
+    data: scatterData,
+    options: scatterOptions
+  };
+
+  const canvas = document.createElement('canvas');
+  const scatterContainer = document.getElementById('scatter-container');
+  scatterContainer.innerHTML = '';
+  scatterContainer.appendChild(canvas);
+
+  const ctx = canvas.getContext('2d');
+  new Chart(ctx, scatterConfig);
+}
+
+function getColumnData(data, columnName) {
+  const headerRow = data[0];
+  var columnIndex = -1;
+
+  for(var i=0;i<headerRow.length;i++) {
+    if (headerRow[i].indexOf(columnName) !== -1 && data[1][i]!="") {
+      columnIndex = i;
+      break;
+    }
+  }
+
+  if (columnIndex === -1) {
+    console.log(`Column '${columnName}' not found.`);
+    return [];
+  }
+
+  var column=[];
+  for(var i=1;i<data.length;i++) {
+    column.push(removeUnit(data[i][columnIndex]));
+  }
+  return column;
 }
