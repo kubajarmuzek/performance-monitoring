@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>performance-monitoring</title>
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://kit.fontawesome.com/1f3d88931b.js" crossorigin="anonymous"></script>
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+
+</head>
+
+<body>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js";
+        import { getAuth } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js";
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Import Firebase modules using ES6 imports
+
+            // Your web app's Firebase configuration
+            const firebaseConfig = {
+                apiKey: "AIzaSyBbVSiybHh23WCgDCqYBt6SxJMPuUJXYJ4",
+                authDomain: "performance-monitoring-bb199.firebaseapp.com",
+                databaseURL: "https://performance-monitoring-bb199-default-rtdb.firebaseio.com",
+                projectId: "performance-monitoring-bb199",
+                storageBucket: "performance-monitoring-bb199.appspot.com",
+                messagingSenderId: "881617197814",
+                appId: "1:881617197814:web:6f615d6f36c7e11ed6ead7"
+            };
+
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+
+            // Add event listener for the logout icon
+            document.getElementById('logout-icon').addEventListener('click', function () {
+                const auth = getAuth();
+                auth.signOut().then(() => {
+                    // Logout successful
+                    // You can add any additional actions here after the user has been logged out
+                    // For example, redirecting the user to the login page
+                    window.location.href = "index.html";
+                }).catch((error) => {
+                    // An error occurred during logout
+                    console.error('Logout Error:', error);
+                });
+            });
+        });
+    </script>
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="#">Performance charts</a>
+        <a href="readiness.html">Readiness protocol</a>
+    </div>
+
+    <div id="logout-container">
+        <i class="fas fa-sign-out-alt" id="logout-icon"></i>
+    </div>
+
+    <!-- Use any element to open the sidenav -->
+    <span onclick="openNav()" class="menu-bars"><i class="fa-solid fa-bars fa-2xl"></i></span>
+
+    <!-- Add all page content inside this div if you want the side nav to push page content to the right (not used if you only want the sidenav to sit on top of the page -->
+    <div id="main">
+        <div class="intro">
+            <h1>Performance monitoring app</h1>
+            <div class="upload-section">
+                <h2>Choose a .csv extension file containing data you want to compare</h2>
+                <input type="file" id="file-input">
+                <button onclick="uploadFile()">Upload</button>
+                <button onclick="clearView()">Clear</button>
+            </div>
+        </div>
+        <div id="canvas-container">
+
+        </div>
+    </div>
+
+</body>
+
+</html>

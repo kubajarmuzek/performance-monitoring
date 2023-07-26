@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
+
   const submitButton = document.getElementById('submit');
   submitButton.addEventListener('click', calculateScore);
 
@@ -61,9 +62,15 @@ function openPopup(score) {
 
 
 function clearView() {
-  const divs = document.querySelectorAll('div[id^="canvas-container-"]');
+  const correlation_divs = document.querySelectorAll('div[id^="correlation"]');
+  correlation_divs.forEach(function (div) {
+    div.parentNode.removeChild(div);
+  });
 
-  divs.forEach(function (div) {
+
+  const canvas_divs = document.querySelectorAll('div[id^="canvas-container-"]');
+
+  canvas_divs.forEach(function (div) {
     div.parentNode.removeChild(div);
   });
 
@@ -91,6 +98,7 @@ function closeNav() {
 
 
 function uploadFile() {
+  clearView();
   var fileInput = document.getElementById('file-input');
   var file = fileInput.files[0];
 
@@ -193,6 +201,9 @@ function createChart(name, chart_label, dates, data) {
 
   canvas.setAttribute('id', 'myChart');
 
+  canvas.style.width = '400px'; /* Set the desired width of the chart */
+  canvas.style.height = '300px'; /* Set the desired height of the chart */
+
   const containerId = `canvas-container-${name}`;
   const container = document.getElementById(containerId);
   if (container) {
@@ -267,11 +278,12 @@ function enableCorelation(types,data) {
   const canvasContainer = document.getElementById('canvas-container');
 
   const newDiv = document.createElement('div');
+  newDiv.setAttribute('id','correlation')
   const innerDiv = document.createElement('div');
   innerDiv.setAttribute('id','selection');
   const header = document.createElement('h2');
   const button = document.createElement('button');
-  button.textContent = 'See corelation';
+  button.textContent = 'See correlation';
 
   header.textContent = 'Correlation';
   newDiv.appendChild(header);

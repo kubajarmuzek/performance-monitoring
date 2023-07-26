@@ -3,42 +3,122 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>performance-monitoring</title>
-    <script src="script.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="styles.css">
+    <title>Sign in</title>
+    <link rel="stylesheet" href="auth.css">
     <script src="https://kit.fontawesome.com/1f3d88931b.js" crossorigin="anonymous"></script>
     <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
 </head>
 
 <body>
-    <div id="mySidenav" class="sidenav">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a href="#">Performance charts</a>
-        <a href="readiness.html">Readiness protocol</a>
-    </div>
+    <div id="login-box">
+        <div class="left">
+            <h1>Sign up</h1>
 
-    <!-- Use any element to open the sidenav -->
-    <span onclick="openNav()" class="menu-bars"><i class="fa-solid fa-bars fa-2xl"></i></span>
+            <input type="text" id="username" name="username" placeholder="username" />
+            <input type="text" id="email" name="email" placeholder="E-mail" />
+            <input type="password" id="password" name="password" placeholder="Password" />
 
-    <!-- Add all page content inside this div if you want the side nav to push page content to the right (not used if you only want the sidenav to sit on top of the page -->
-    <div id="main">
-        <div class="intro">
-            <h1>Performance monitoring app</h1>
-            <div class="upload-section">
-                <h2>Choose a .csv extension file containing data you want to compare</h2>
-                <input type="file" id="file-input">
-                <button onclick="uploadFile()">Upload</button>
-                <button onclick="clearView()">Clear</button>
-            </div>
+            <input type="submit" id="signUp" name="signup_submit" value="Sign up" />
+
+            <h1>Sign in</h1>
+
+            <input type="text" id="signinemail" name="signinemail" placeholder="E-mail" />
+            <input type="password" id="signinpassword" name="signinpassword" placeholder="Password" />
+
+            <input type="submit" id="signIn" name="signin_submit" value="Sign in" />
         </div>
-        <div id="canvas-container">
-            
+        <div class="or">OR</div>
+        <div class="right">
+            <span class="loginwith">Sign in with <br> social network</span>
+            <button class="social-signin facebook">Log in with facebook</button>
+            <button class="social-signin twitter">Log in with Twitter</button>
+            <button class="social-signin google">Log in with Google</button>
         </div>
+        
     </div>
-
 </body>
+
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js";
+    import { getDatabase, set, ref, update } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-database.js"
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js";
+
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyBbVSiybHh23WCgDCqYBt6SxJMPuUJXYJ4",
+        authDomain: "performance-monitoring-bb199.firebaseapp.com",
+        databaseURL: "https://performance-monitoring-bb199-default-rtdb.firebaseio.com",
+        projectId: "performance-monitoring-bb199",
+        storageBucket: "performance-monitoring-bb199.appspot.com",
+        messagingSenderId: "881617197814",
+        appId: "1:881617197814:web:6f615d6f36c7e11ed6ead7"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+    const auth = getAuth();
+
+    var signUp = document.getElementById('signUp');
+    var signIn = document.getElementById('signIn');
+
+    signUp.addEventListener('click', (e) => {
+        
+        var email = document.getElementById('email').value;
+        var password = document.getElementById('password').value;
+        var username = document.getElementById('username').value;
+
+        createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                // Signed in 
+                const user = userCredential.user;
+
+                set(ref(database, 'users/' + user.uid), {
+                    username: username,
+                    email: email
+                });
+                alert('user created!');
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+
+                alert(errorMessage);
+            });
+    });
+
+    signIn.addEventListener('click', (e) => {
+
+        var email = document.getElementById('signinemail').value;
+        var password = document.getElementById('signinpassword').value;
+
+        signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                // Signed in 
+                const user = userCredential.user;
+                const dt = new Date();
+
+                update(ref(database, 'users/' + user.uid),{
+                    last_login:dt
+                });
+
+                alert('User loged in');
+
+                window.location.href = "main.html";
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+
+                alert(errorMessage);
+            });
+
+    });
+</script>
 
 </html>
